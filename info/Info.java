@@ -6,7 +6,7 @@ public class Info
 	
 	protected Info()
 	{
-		
+		m_ID = null;
 	}
 	
 	protected Info(String ID)
