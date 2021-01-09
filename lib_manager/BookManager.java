@@ -330,7 +330,7 @@ public class BookManager
 		{
 			if(bookList.get(i).getID().equals(temp))
 			{
-				
+				System.out.println(String.format("도서 '%s' 분실처리를 완료했습니다.",bookList.remove(i).getTitle()));
 				return;
 			}
 		}
@@ -340,7 +340,23 @@ public class BookManager
 	{
 		ArrayList<Book> result = new ArrayList<Book>();
 		
-		
+		for(int i = 0 ; i < bookList.size(); i++)
+		{
+			if(bAuthor)
+			{
+				if(bookList.get(i).getAuthor().equals(target))
+				{
+					result.add(bookList.get(i));
+				}
+			}
+			else
+			{
+				if(bookList.get(i).getTitle().equals(target))
+				{
+					result.add(bookList.get(i));
+				}
+			}
+		}
 		
 		return result;
 	}
