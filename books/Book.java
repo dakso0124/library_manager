@@ -48,4 +48,10 @@ public class Book extends Info
 		m_title = title;
 		m_author = author;
 	}
+	
+	@Override
+	public void showInfo()
+	{
+		System.out.println(String.format("ID : %s, 제목 : %s, 저자 : %s", m_ID, m_title, m_author));
+	}
 }

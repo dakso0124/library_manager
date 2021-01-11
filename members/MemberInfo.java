@@ -4,13 +4,15 @@ import info.Info;
 
 import java.util.ArrayList;
 
+import books.Book;
+
 public class MemberInfo extends Info
 {
 	private String m_name;
 	private String m_phoneNumber;
 	private int m_age;
 	
-	private ArrayList<String> m_rentalList;
+	private ArrayList<Book> m_rentalList;
 	
 	public MemberInfo()
 	{
@@ -25,7 +27,7 @@ public class MemberInfo extends Info
 		m_phoneNumber = phoneNumber;
 		m_age = age;
 		
-		m_rentalList = new ArrayList<String>();
+		m_rentalList = new ArrayList<Book>();
 	}
 
 	public String getName()
@@ -43,7 +45,7 @@ public class MemberInfo extends Info
 		return m_age;
 	}
 
-	public ArrayList<String> getRentalList()
+	public ArrayList<Book> getRentalList()
 	{
 		return m_rentalList;
 	}
@@ -55,6 +57,29 @@ public class MemberInfo extends Info
 		m_phoneNumber	= phoneNumber;
 		m_age 			= age;
 	}
+
+	@Override
+	public void showInfo()
+	{
+		System.out.println(String.format("ID : %s, 이름 : %s, 전화번호 : %s, 나이 : %d\n대여 목록 : ", m_ID, m_name, m_phoneNumber, m_age));
+		
+		for(int i = 0 ; i < m_rentalList.size(); i++)
+			m_rentalList.get(i).showInfo();
+	}
 	
-	
+	// id 매칭해야하는지 확인 필요.
+	public void rentalBook(Book book, boolean bRental)
+	{
+		if(bRental)
+		{
+			m_rentalList.add(book);
+		}
+		else
+		{
+			if(m_rentalList.contains(book))
+			{
+				m_rentalList.remove(book);
+			}
+		}
+	}
 }

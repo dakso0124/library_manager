@@ -1,6 +1,6 @@
 package info;
 
-public class Info
+public abstract class Info
 {
 	protected String m_ID;
 	
@@ -18,4 +18,6 @@ public class Info
 	{
 		return m_ID;
 	}
+	
+	public abstract void showInfo();
 }

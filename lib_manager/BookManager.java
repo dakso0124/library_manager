@@ -72,28 +72,39 @@ public class BookManager
 			{
 				System.out.print("도서를 추가합니다\n제목을 입력해 주세요 : ");
 				title = ScannerInstance.sc.nextLine();
+				
 				System.out.print("저자를 입력해 주세요 : ");
 				author = ScannerInstance.sc.nextLine();
 				
+				int tryCount = 0;
+				
 				while(true)
 				{
-					System.out.println(String.format("제목과 저자가 %s, %s가 맞습니까? Y/N", title, author));
+					System.out.print(String.format("제목과 저자가 %s, %s가 맞습니까? Y/N", title, author));
 					
 					String temp = ScannerInstance.sc.nextLine();
 					
 					if(temp.toUpperCase().equals("Y"))
 					{
 						bookList.add(new Book(m_lastBookID,title, author));
-						System.out.println(String.format("도서  : %s,\nID : %s 추가되었습니다.", title, m_lastBookID));
+						System.out.println(String.format("도서  : %s, ID : %s 추가되었습니다.", title, m_lastBookID));
 						return;
 					}
 					else if(temp.toUpperCase().equals("N"))
 					{
+						tryCount++;
 						System.out.println("다시 입력합니다.");
 						break;
 					}
 					else
 					{
+						tryCount++;
+						
+						if(tryCount == 3)
+						{
+							System.out.println("도서 추가를 취소하고 이전 메뉴로 돌아갑니다.");
+							return;
+						}
 						System.out.println("제목과 저자를 확인후 Y or N을 입력해주세요.");
 						continue;
 					}
@@ -136,18 +147,9 @@ public class BookManager
 					ArrayList<Book> authorList = search(temp, false);
 					
 					if(authorList.size() == 0)
-					{
 						System.out.println("입력한 저자의 책이 없습니다.");
-					}
 					else
-					{
-						System.out.println(String.format("총 %d권의 도서가 검색되었습니다.", authorList.size()));
-						for(int i = 0; i < authorList.size(); i++)
-						{
-							System.out.println(String.format("%d. 제목 : %s, 저자 : %s, ID : %s", i, authorList.get(i).getTitle(), authorList.get(i).getAuthor(), authorList.get(i).getID())); 
-						}
-						System.out.println("-------------------------");
-					}
+						showBookInfo(authorList);
 					
 					break;
 					
@@ -157,19 +159,9 @@ public class BookManager
 					ArrayList<Book> titleList = search(temp, false);
 					
 					if(titleList.size() == 0)
-					{
 						System.out.println("입력한 제목의 책이 없습니다.");
-					}
 					else
-					{
-						System.out.println(String.format("총 %d권의 도서가 검색되었습니다.", titleList.size()));
-						for(int i = 0; i < titleList.size(); i++)
-						{
-							System.out.println(String.format("%d. 제목 : %s, 저자 : %s, ID : %s, 상태 : %s", 
-									i, titleList.get(i).getTitle(), titleList.get(i).getAuthor(), titleList.get(i).getID(), (titleList.get(i).getRental() ? "대여중" : "보관중"))); 
-						}
-						System.out.println("-------------------------");
-					}
+						showBookInfo(titleList);
 					
 					break;
 					
@@ -184,6 +176,16 @@ public class BookManager
 			
 			break;
 		}
+	}
+	
+	public void showBookInfo(ArrayList<Book> showList)
+	{
+		System.out.println(String.format("총 %d권의 도서가 검색되었습니다.", showList.size()));
+		for(int i = 0; i < showList.size(); i++)
+		{
+			showList.get(i).showInfo();
+		}
+		System.out.println("-------------------------");
 	}
 	
 	// 전체 검색  title, 회원번호
@@ -213,7 +215,7 @@ public class BookManager
 		
 		for(int i = 0 ; i < tempList.size(); i++)
 		{
-			System.out.println(String.format("%s", tempList.get(i).getTitle()));
+			tempList.get(i).showInfo();
 		}
 	}
 	

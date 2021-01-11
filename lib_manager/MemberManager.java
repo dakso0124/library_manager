@@ -1,18 +1,22 @@
 package lib_manager;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.NoSuchElementException;
 
+import books.Book;
 import main.ScannerInstance;
 import members.MemberInfo;
 
 public class MemberManager
 {
-	private ArrayList<MemberInfo> m_infoList;
+	private ArrayList<MemberInfo> m_memberList;
 	private String m_lastMemberID;
+	
 	public void init()
 	{
-		m_infoList = new ArrayList<MemberInfo>();
+		m_memberList = new ArrayList<MemberInfo>();
 		m_lastMemberID = null;
 	}
 	
@@ -32,7 +36,7 @@ public class MemberManager
 						addMember();
 						break;
 					case "2":
-						searchMember();
+						searchMembers();
 						break;
 					case "3":
 						editMemberInfo();
@@ -79,7 +83,7 @@ public class MemberManager
 				System.out.print("회원의 나이를 입력해주세요 : ");
 				age = ScannerInstance.sc.nextLine();
 				
-				m_infoList.add(new MemberInfo(m_lastMemberID, name, phone, Integer.parseInt(age)));
+				m_memberList.add(new MemberInfo(m_lastMemberID, name, phone, Integer.parseInt(age)));
 				
 				System.out.println(String.format("회원 %s님이 추가되었습니다. ( ID : %s )", name, m_lastMemberID));
 			}
@@ -96,9 +100,10 @@ public class MemberManager
 		}
 	}
 	
-	private void searchMember()
+	private void searchMembers()
 	{
 		String temp = null;
+		String target = null;
 		
 		while(true)
 		{
@@ -108,16 +113,35 @@ public class MemberManager
 			switch(temp)
 			{
 				case "1":
-
+					searchAll(true);
 					break;
 				case "2":
-
+					searchAll(false);
 					break;
 				case "3":
-
-					break;
 				case "4":
-
+					
+					while(true)
+					{
+						try 
+						{
+							System.out.print(String.format("검색할 회원의 %s를 입력하세요 : ", (temp.equals("3")? "ID" : "이름")));
+							target = ScannerInstance.sc.nextLine();
+							
+							 searchMember(target, false);
+						}
+						catch(NoSuchElementException e)
+						{
+							
+						}
+						catch(IllegalStateException e)
+						{
+							
+						}						
+						
+						break;
+					}
+					
 					break;
 				case "5":
 					System.out.println("이전 메뉴로 돌아갑니다.");
@@ -143,13 +167,13 @@ public class MemberManager
 			switch(temp)
 			{
 				case "1":
-
+					
 					break;
 				case "2":
-
+					
 					break;
 				case "3":
-
+					
 					return;
 				default:
 					System.out.println("메뉴를 확인해주세요.");
@@ -172,13 +196,13 @@ public class MemberManager
 			switch(temp)
 			{
 				case "1":
-
+					searchMember(true);
 					break;
 				case "2":
-
+					searchMember(false);
 					break;
 				case "3":
-
+					System.out.println("이전 메뉴로 돌아갑니다.");
 					return;
 				default:
 					System.out.println("메뉴를 확인해주세요.");
@@ -187,5 +211,45 @@ public class MemberManager
 			
 			break;
 		}
+	}
+	
+	private void searchAll(boolean bName)
+	{
+		ArrayList<MemberInfo> tempList = m_memberList;
+		
+		// 이름 정렬
+		if(bName)
+		{
+			Collections.sort(tempList, new Comparator() {
+				@Override
+				public int compare(Object b1, Object b2) {
+					return ((MemberInfo)b1).getName().compareTo(((MemberInfo)b2).getName());
+				}
+			});
+		}
+		else
+		{
+			Collections.sort(tempList, new Comparator() {
+				@Override
+				public int compare(Object b1, Object b2) {
+					return ((MemberInfo)b1).getID().compareTo(((MemberInfo)b2).getID());
+				}
+			});
+		}
+		
+		for(int i = 0 ; i < tempList.size(); i++)
+		{
+			tempList.get(i).showInfo();
+		}
+	}
+	
+	private void searchMember(String target, boolean bName)
+	{
+		
+	}
+	
+	private void selectMember()
+	{
+		
 	}
 }
