@@ -125,11 +125,13 @@ public class BookManager
 	
 	public void searchBook()
 	{
+		String temp = null;
+		String target = null;
 		while(true)
 		{
 			System.out.println("도서 검색 메뉴입니다. 원하는 메뉴를 선택해 주세요.\n1. 전체 도서 검색(제목 순)\n2. 전체 도서 검색(ID 순)\n"
 					+ "3. 저자 검색\n4. 제목 검색\n5. 이전메뉴로");
-			String temp = ScannerInstance.sc.nextLine();
+			temp = ScannerInstance.sc.nextLine();
 			
 			switch(temp)
 			{
@@ -142,26 +144,15 @@ public class BookManager
 					break;
 					
 				case "3":
-					System.out.print("저자의 이름을 입력하세요 : ");
-					temp = ScannerInstance.sc.nextLine();
-					ArrayList<Book> authorList = search(temp, false);
+				case "4":
+					System.out.print(String.format("%s 입력하세요 : ", (temp.equals("3")? "저자를" : "제목을") ));
+					target = ScannerInstance.sc.nextLine();
+					ArrayList<Book> authorList = search(target, false);
 					
 					if(authorList.size() == 0)
-						System.out.println("입력한 저자의 책이 없습니다.");
+						System.out.println(String.format("%s 책이 없습니다.", (target.equals("3")? "저자의" : "입력하신 제목의")));
 					else
 						showBookInfo(authorList);
-					
-					break;
-					
-				case "4":
-					System.out.print("제목을 입력하세요 : ");
-					temp = ScannerInstance.sc.nextLine();
-					ArrayList<Book> titleList = search(temp, false);
-					
-					if(titleList.size() == 0)
-						System.out.println("입력한 제목의 책이 없습니다.");
-					else
-						showBookInfo(titleList);
 					
 					break;
 					
@@ -359,6 +350,8 @@ public class BookManager
 				}
 			}
 		}
+		
+		System.out.println(result.size());
 		
 		return result;
 	}

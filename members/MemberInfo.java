@@ -34,10 +34,20 @@ public class MemberInfo extends Info
 	{
 		return m_name;
 	}
+	
+	public void setName(String name)
+	{
+		m_name = name;
+	}
 
 	public String getPhoneNumber()
 	{
 		return m_phoneNumber;
+	}
+	
+	public void setPhoneNumber(String phone)
+	{
+		m_phoneNumber = phone;
 	}
 
 	public int getAge()
