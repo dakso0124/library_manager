@@ -97,14 +97,9 @@ public class MemberInfo extends Info
 	@Override
 	public String toString()
 	{
-		String result = this.m_ID + LibraryDataBase.infoSeparator + this.m_name + LibraryDataBase.infoSeparator
-				+ this.m_phoneNumber + LibraryDataBase.infoSeparator + this.m_age + LibraryDataBase.infoSeparator
-				+ LibraryDataBase.rentalSeparator;
-		
-		for(int i = 0 ; i < m_rentalList.size(); i++)
-		{
-			result += m_rentalList.get(i).toString();
-		}
+		String result = this.m_ID + LibraryDataBase.memberSeparator + this.m_name + LibraryDataBase.memberSeparator
+				+ this.m_phoneNumber + LibraryDataBase.memberSeparator + this.m_age;
+
 		return  result;
 	}
 }
