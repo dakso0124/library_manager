@@ -12,12 +12,15 @@ public class BookManager
 {
 	private ArrayList<Book> bookList;
 	private String m_lastBookID;
+	private int m_lastID;
 	
 	public void init()
 	{
+		m_lastID 	 = 0;
+		
 		bookList 	 = new ArrayList<Book>();
 		
-		m_lastBookID = null;
+		m_lastBookID = String.format("%05d", m_lastID);
 	}
 	
 	public void showMenu()
@@ -26,7 +29,7 @@ public class BookManager
 		{
 			System.out.println("도서 관리 메뉴입니다. 메뉴를 선택해주세요.\n1. 도서 추가\n2. 도서 검색\n3. 도서 대여\n4. 도서 반납\n 5. 도서 분실\n6. 이전 메뉴로");
 			
-			String temp = ScannerInstance.sc.nextLine();
+			String temp = ScannerInstance.getInstance().nextLine();
 			
 			switch(temp)
 			{
@@ -71,23 +74,25 @@ public class BookManager
 			try
 			{
 				System.out.print("도서를 추가합니다\n제목을 입력해 주세요 : ");
-				title = ScannerInstance.sc.nextLine();
+				title = ScannerInstance.getInstance().nextLine();
 				
 				System.out.print("저자를 입력해 주세요 : ");
-				author = ScannerInstance.sc.nextLine();
+				author = ScannerInstance.getInstance().nextLine();
 				
 				int tryCount = 0;
 				
 				while(true)
 				{
-					System.out.print(String.format("제목과 저자가 %s, %s가 맞습니까? Y/N", title, author));
+					System.out.print(String.format("제목 : %s\n저자 : %s\n위 정보가 맞습니까? Y/N : ", title, author));
 					
-					String temp = ScannerInstance.sc.nextLine();
+					String temp = ScannerInstance.getInstance().nextLine();
 					
 					if(temp.toUpperCase().equals("Y"))
 					{
 						bookList.add(new Book(m_lastBookID,title, author));
-						System.out.println(String.format("도서  : %s, ID : %s 추가되었습니다.", title, m_lastBookID));
+						System.out.println(String.format("제목 : %s, ID : %s 추가되었습니다.", title, m_lastBookID));
+						m_lastID++;
+						m_lastBookID = String.format("%05d", m_lastID);
 						return;
 					}
 					else if(temp.toUpperCase().equals("N"))
@@ -131,7 +136,7 @@ public class BookManager
 		{
 			System.out.println("도서 검색 메뉴입니다. 원하는 메뉴를 선택해 주세요.\n1. 전체 도서 검색(제목 순)\n2. 전체 도서 검색(ID 순)\n"
 					+ "3. 저자 검색\n4. 제목 검색\n5. 이전메뉴로");
-			temp = ScannerInstance.sc.nextLine();
+			temp = ScannerInstance.getInstance().nextLine();
 			
 			switch(temp)
 			{
@@ -145,12 +150,14 @@ public class BookManager
 					
 				case "3":
 				case "4":
+					Boolean bAuthor = temp.equals("3")? true:false;
+					
 					System.out.print(String.format("%s 입력하세요 : ", (temp.equals("3")? "저자를" : "제목을") ));
-					target = ScannerInstance.sc.nextLine();
-					ArrayList<Book> authorList = search(target, false);
+					target = ScannerInstance.getInstance().nextLine();
+					ArrayList<Book> authorList = search(target, bAuthor);
 					
 					if(authorList.size() == 0)
-						System.out.println(String.format("%s 책이 없습니다.", (target.equals("3")? "저자의" : "입력하신 제목의")));
+						System.out.println(String.format("%s 책이 없습니다.", (temp.equals("3")? "저자의" : "입력하신 제목의")));
 					else
 						showBookInfo(authorList);
 					
@@ -217,13 +224,13 @@ public class BookManager
 			try
 			{
 				System.out.print("도서를 대여합니다.\n1. 제목 검색\n2. ID 검색\n3. 이전 메뉴로\n원하는 메뉴를 선택해주세요 : ");
-				String temp = ScannerInstance.sc.nextLine();
+				String temp = ScannerInstance.getInstance().nextLine();
 				
 				switch(temp)
 				{
 					case "1":
 						System.out.print("대여할 도서의 제목을 입력해 주세요 : ");
-						temp = ScannerInstance.sc.nextLine();
+						temp = ScannerInstance.getInstance().nextLine();
 						
 						boolean bExist = false;
 
@@ -249,7 +256,7 @@ public class BookManager
 						
 					case "2":
 						System.out.print("대여할 도서의 ID를 입력해 주세요 : ");
-						temp = ScannerInstance.sc.nextLine();
+						temp = ScannerInstance.getInstance().nextLine();
 
 						for(int i = 0; i < bookList.size(); i++)
 						{
@@ -295,7 +302,7 @@ public class BookManager
 	public void returnBook()
 	{
 		System.out.print("도서를 반납합니다.\n반납한 도서의 ID를 입력해 주세요 : ");
-		String temp = ScannerInstance.sc.nextLine();
+		String temp = ScannerInstance.getInstance().nextLine();
 		
 		for(int i = 0; i < bookList.size(); i++)
 		{
@@ -317,7 +324,7 @@ public class BookManager
 	public void lossBook()
 	{
 		System.out.print("도서 분실 등록 합니다.\n분실된 도서의 ID를 입력해 주세요 : ");
-		String temp = ScannerInstance.sc.nextLine();
+		String temp = ScannerInstance.getInstance().nextLine();
 		
 		for(int i = 0; i < bookList.size(); i++)
 		{
@@ -344,14 +351,12 @@ public class BookManager
 			}
 			else
 			{
-				if(bookList.get(i).getTitle().equals(target))
+				if(bookList.get(i).getTitle().contains(target))
 				{
 					result.add(bookList.get(i));
 				}
 			}
 		}
-		
-		System.out.println(result.size());
 		
 		return result;
 	}

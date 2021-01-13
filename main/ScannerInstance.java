@@ -4,24 +4,22 @@ import java.util.Scanner;
 
 public class ScannerInstance
 {
-	public static Scanner sc; 
-	 //private construct
+	private static Scanner sc; 
+
 	private ScannerInstance()
 	{
 		 
     }
  
-    private static class LazyHolder
+    public static Scanner getInstance()
     {
-        public static final ScannerInstance INSTANCE = new ScannerInstance();
-    }
- 
-    public static ScannerInstance getInstance()
-    {
-        return LazyHolder.INSTANCE;
+    	if(sc == null)
+    		init();
+    	
+        return sc;
     }
     
-    public static void init()
+    private static void init()
     {
     	sc = new Scanner(System.in);
     }

@@ -1,6 +1,7 @@
 package books;
 
 import info.Info;
+import main.LibraryDataBase;
 
 public class Book extends Info
 {
@@ -53,5 +54,12 @@ public class Book extends Info
 	public void showInfo()
 	{
 		System.out.println(String.format("ID : %s, 제목 : %s, 저자 : %s", m_ID, m_title, m_author));
+	}
+	
+	@Override
+	public String toString()
+	{
+		return this.m_ID + LibraryDataBase.infoSeparator + this.m_title + LibraryDataBase.infoSeparator
+				+ this.m_author;
 	}
 }

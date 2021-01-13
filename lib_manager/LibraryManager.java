@@ -10,9 +10,7 @@ public class LibraryManager
 	private MemberManager memberManager;
 	
 	public void init()
-	{
-		ScannerInstance.init();
-		
+	{		
 		bookManager = new BookManager();
 		memberManager = new MemberManager();
 		
@@ -28,7 +26,7 @@ public class LibraryManager
 			
 			try
 			{
-				String temp = ScannerInstance.sc.nextLine();
+				String temp = ScannerInstance.getInstance().nextLine();
 
 				switch(temp)
 				{

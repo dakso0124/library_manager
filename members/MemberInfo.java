@@ -1,6 +1,7 @@
 package members;
 
 import info.Info;
+import main.LibraryDataBase;
 
 import java.util.ArrayList;
 
@@ -91,5 +92,19 @@ public class MemberInfo extends Info
 				m_rentalList.remove(book);
 			}
 		}
+	}
+	
+	@Override
+	public String toString()
+	{
+		String result = this.m_ID + LibraryDataBase.infoSeparator + this.m_name + LibraryDataBase.infoSeparator
+				+ this.m_phoneNumber + LibraryDataBase.infoSeparator + this.m_age + LibraryDataBase.infoSeparator
+				+ LibraryDataBase.rentalSeparator;
+		
+		for(int i = 0 ; i < m_rentalList.size(); i++)
+		{
+			result += m_rentalList.get(i).toString();
+		}
+		return  result;
 	}
 }

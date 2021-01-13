@@ -28,7 +28,7 @@ public class MemberManager
 			try
 			{
 				System.out.println("회원 관리 메뉴입니다. 메뉴를 선택해주세요.\n1. 회원 추가\n2. 회원 검색\n3. 회원정보 수정\n4. 회원탈퇴\n 5. 이전 메뉴로");
-				temp = ScannerInstance.sc.nextLine();
+				temp = ScannerInstance.getInstance().nextLine();
 				
 				switch(temp)
 				{
@@ -75,13 +75,13 @@ public class MemberManager
 			try
 			{
 				System.out.print("이름을 입력해주세요 : ");
-				name = ScannerInstance.sc.nextLine();
+				name = ScannerInstance.getInstance().nextLine();
 				
 				System.out.print("전화번호를 입력해주세요 : ");
-				phone = ScannerInstance.sc.nextLine();
+				phone = ScannerInstance.getInstance().nextLine();
 				
 				System.out.print("나이를 입력해주세요 : ");
-				age = ScannerInstance.sc.nextLine();
+				age = ScannerInstance.getInstance().nextLine();
 				
 				m_memberList.add(new MemberInfo(m_lastMemberID, name, phone, Integer.parseInt(age)));
 				
@@ -108,7 +108,7 @@ public class MemberManager
 		while(true)
 		{
 			System.out.print("회원 정보 검색 메뉴 입니다.\n1. 회원 전체보기 ( 이름 순 )\n2. 회원 전체보기 ( ID 순 )\n3. 이름으로 찾기\n4. ID로 찾기\n5. 이전 메뉴로");
-			temp = ScannerInstance.sc.nextLine();
+			temp = ScannerInstance.getInstance().nextLine();
 			
 			switch(temp)
 			{
@@ -126,7 +126,7 @@ public class MemberManager
 						try 
 						{
 							System.out.print(String.format("검색할 회원의 %s를 입력하세요 : ", (temp.equals("3")? "ID" : "이름")));
-							target = ScannerInstance.sc.nextLine();
+							target = ScannerInstance.getInstance().nextLine();
 							
 							ArrayList<MemberInfo> infos = searchMember(target, false);
 							
@@ -166,7 +166,7 @@ public class MemberManager
 		while(true)
 		{
 			System.out.print("회원 정보를 수정합니다. 수정하고자하는 회원의 \n1. 이름으로 찾기ㅣ\n2. ID로 찾기\n3. 이전 메뉴로");
-			temp = ScannerInstance.sc.nextLine();
+			temp = ScannerInstance.getInstance().nextLine();
 			
 			switch(temp)
 			{
@@ -174,7 +174,7 @@ public class MemberManager
 				case "2":
 					
 					System.out.print(String.format("검색할 사람의 %s를 입력하세요 : ", (temp.equals("1")? "이름" : "ID") ));
-					target =  ScannerInstance.sc.nextLine();
+					target =  ScannerInstance.getInstance().nextLine();
 					ArrayList<MemberInfo> tempList = searchMember(target, false);
 					
 					if(tempList.size() == 0)
@@ -201,7 +201,7 @@ public class MemberManager
 								}
 								
 								System.out.print("수정할 회원의 번호를 입력해 주세요 : ");
-								temp = ScannerInstance.sc.nextLine();
+								temp = ScannerInstance.getInstance().nextLine();
 								
 								if(Integer.parseInt(temp) >= tempList.size())
 								{
@@ -252,7 +252,7 @@ public class MemberManager
 		while(true)
 		{
 			System.out.print("회원 탈퇴를 진행합니다. 탈퇴할 회원의 \n1. 이름으로 찾기\n2. ID로 찾기\n3. 이전 메뉴로");
-			temp = ScannerInstance.sc.nextLine();
+			temp = ScannerInstance.getInstance().nextLine();
 			
 			switch(temp)
 			{
@@ -260,7 +260,7 @@ public class MemberManager
 				case "2":
 					
 					System.out.print(String.format("검색할 사람의 %s를 입력하세요 : ", (temp.equals("1")? "이름" : "ID") ));
-					target =  ScannerInstance.sc.nextLine();
+					target =  ScannerInstance.getInstance().nextLine();
 					ArrayList<MemberInfo> tempList = searchMember(target, false);
 					
 					if(tempList.size() == 0)
@@ -294,7 +294,7 @@ public class MemberManager
 								}
 								
 								System.out.print("수정할 회원의 번호를 입력해 주세요 : ");
-								temp = ScannerInstance.sc.nextLine();
+								temp = ScannerInstance.getInstance().nextLine();
 								
 								if(Integer.parseInt(temp) >= tempList.size())
 								{
@@ -402,10 +402,10 @@ public class MemberManager
 			try
 			{
 				System.out.print("회원정보를 수정합니다.\n이름을 입력하세요 : ");
-				name = ScannerInstance.sc.nextLine();
+				name = ScannerInstance.getInstance().nextLine();
 				
 				System.out.print("전화번호를 입력해주세요 : ");
-				phone = ScannerInstance.sc.nextLine();
+				phone = ScannerInstance.getInstance().nextLine();
 				
 				info.setName(name);
 				info.setPhoneNumber(phone);
