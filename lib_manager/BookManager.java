@@ -26,6 +26,11 @@ public class BookManager
 	private String m_lastBookID;
 	private int m_lastID;
 	
+	private BookManager()
+	{
+		init();
+	}
+	
 	public void init()
 	{
 		m_lastID 	 = 0;
@@ -57,7 +62,7 @@ public class BookManager
 	{
 		while(true)
 		{
-			System.out.println("도서 관리 메뉴입니다. 메뉴를 선택해주세요.\n1. 도서 추가\n2. 도서 검색\n3. 도서 대여\n4. 도서 반납\n 5. 도서 분실\n6. 이전 메뉴로");
+			System.out.println("도서 관리 메뉴입니다. 메뉴를 선택해주세요.\n1. 도서 추가\n2. 도서 검색\n3. 도서 대여\n4. 도서 반납\n5. 도서 분실\n6. 이전 메뉴로");
 			
 			String temp = ScannerInstance.getInstance().nextLine();
 			
@@ -85,7 +90,7 @@ public class BookManager
 					
 				case "6":
 					System.out.println("메인 메뉴로 돌아갑니다.");
-					break;
+					return;
 					
 				default:
 					System.out.println("메뉴를 확인하고 제대로 입력해주세요.");
@@ -120,9 +125,12 @@ public class BookManager
 					if(temp.toUpperCase().equals("Y"))
 					{
 						m_bookList.add(new Book(m_lastBookID,title, author));
-						System.out.println(String.format("제목 : %s, ID : %s 추가되었습니다.", title, m_lastBookID));
+						
 						m_lastID++;
 						m_lastBookID = String.format("%05d", m_lastID);
+						
+						LibraryManager.getInstance().saveBookData(m_bookList);
+						System.out.println(String.format("제목 : %s, ID : %s 추가되었습니다.", title, m_lastBookID));
 						return;
 					}
 					else if(temp.toUpperCase().equals("N"))

@@ -8,9 +8,7 @@ public class lib_main
 	{
 		System.out.println("도서관리 프로그램을 시작합니다.");
 		
-		LibraryManager lm = new LibraryManager();
+		LibraryManager.getInstance().startManager();
 		
-		lm.init();
-		lm.startManager();
 	}
 }

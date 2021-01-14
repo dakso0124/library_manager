@@ -16,13 +16,20 @@ public class MemberManager
 	public static MemberManager getInstance()
     {
     	if(instance == null)
+		{
     		instance = new MemberManager();
+		}
     	
         return instance;
     }
 	
 	private ArrayList<MemberInfo> m_memberList;
 	private String m_lastMemberID;
+	
+	private MemberManager()
+	{
+		init();
+	}
 	
 	public void init()
 	{
@@ -60,6 +67,7 @@ public class MemberManager
 						removeMember();
 						break;
 					case "5":
+						System.out.println("이전 메뉴로 돌아갑니다.");
 						return;
 					default:
 						System.out.println("메뉴를 확인해주세요.");
@@ -101,6 +109,7 @@ public class MemberManager
 				m_memberList.add(new MemberInfo(m_lastMemberID, name, phone, Integer.parseInt(age)));
 				
 				System.out.println(String.format("회원 %s님이 추가되었습니다. ( ID : %s )", name, m_lastMemberID));
+				LibraryManager.getInstance().saveMemberData(m_memberList);
 			}
 			catch(NoSuchElementException e)
 			{

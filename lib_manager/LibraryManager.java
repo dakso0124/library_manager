@@ -1,24 +1,34 @@
 package lib_manager;
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
+import books.Book;
 import main.LibraryDataBase;
 import main.ScannerInstance;
+import members.MemberInfo;
 
 public class LibraryManager
 {
-	private BookManager bookManager;
-	private MemberManager memberManager;
+	private static LibraryManager instance;
+	
+	public static LibraryManager getInstance()
+    {
+    	if(instance == null)
+    		instance = new LibraryManager();
+    	
+        return instance;
+    }
 	private LibraryDataBase dataManager;
 	
+	private LibraryManager()
+	{
+		init();
+	}
+	
 	public void init()
-	{		
-		bookManager = new BookManager();
-		memberManager = new MemberManager();
+	{
 		dataManager = new LibraryDataBase();
-		
-		bookManager.init();
-		memberManager.init();
 		
 		dataManager.loadLibraryInfo();
 	}
@@ -36,14 +46,14 @@ public class LibraryManager
 				switch(temp)
 				{
 					case "1":
-						bookManager.showMenu();
+						BookManager.getInstance().showMenu();
 						break;
 					case "2":
-						memberManager.showMenu();
+						MemberManager.getInstance().showMenu();
 						break;
 					case "3":
 						finishManager();
-						break;
+						return;
 					default:
 						System.out.println("메뉴를 숫자로 입력해  주세요.");
 						break;
@@ -58,7 +68,16 @@ public class LibraryManager
 				
 			}
 		}
-
+	}
+	
+	public void saveMemberData(ArrayList<MemberInfo> memberList)
+	{
+		dataManager.SaveMemberList(memberList);
+	}
+	
+	public void saveBookData(ArrayList<Book> bookList)
+	{
+		dataManager.SaveBookList(bookList);
 	}
 	
 	private void finishManager()
