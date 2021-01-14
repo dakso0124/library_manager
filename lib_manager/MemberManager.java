@@ -24,6 +24,7 @@ public class MemberManager
     }
 	
 	private ArrayList<MemberInfo> m_memberList;
+	private int m_lastID;
 	private String m_lastMemberID;
 	
 	private MemberManager()
@@ -33,13 +34,17 @@ public class MemberManager
 	
 	public void init()
 	{
+		m_lastID = 0;
 		m_memberList = new ArrayList<MemberInfo>();
-		m_lastMemberID = String.format("%05d", m_lastMemberID);
+		m_lastMemberID = String.format("%05d", m_lastID);
 	}
 	
 	public void setMemberInfo(ArrayList<MemberInfo> memberList)
 	{
 		m_memberList = memberList;
+		
+		m_lastID = memberList.size();
+		m_lastMemberID = String.format("%05d", m_lastID);
 	}
 	
 	public void showMenu()
@@ -49,7 +54,7 @@ public class MemberManager
 		{
 			try
 			{
-				System.out.println("회원 관리 메뉴입니다. 메뉴를 선택해주세요.\n1. 회원 추가\n2. 회원 검색\n3. 회원정보 수정\n4. 회원탈퇴\n 5. 이전 메뉴로");
+				System.out.println("회원 관리 메뉴입니다. 메뉴를 선택해주세요.\n1. 회원 추가\n2. 회원 검색\n3. 회원정보 수정\n4. 회원탈퇴\n5. 이전 메뉴로");
 				temp = ScannerInstance.getInstance().nextLine();
 				
 				switch(temp)
@@ -110,6 +115,9 @@ public class MemberManager
 				
 				System.out.println(String.format("회원 %s님이 추가되었습니다. ( ID : %s )", name, m_lastMemberID));
 				LibraryManager.getInstance().saveMemberData(m_memberList);
+				
+				m_lastID++;
+				m_lastMemberID = String.format("%05d", m_lastID);
 			}
 			catch(NoSuchElementException e)
 			{
@@ -149,10 +157,10 @@ public class MemberManager
 					{
 						try 
 						{
-							System.out.print(String.format("검색할 회원의 %s를 입력하세요 : ", (temp.equals("3")? "ID" : "이름")));
+							System.out.print(String.format("검색할 회원의 %s를 입력하세요 : ", (temp.equals("3")? "이름" : "ID")));
 							target = ScannerInstance.getInstance().nextLine();
 							
-							ArrayList<MemberInfo> infos = searchMember(target, false);
+							ArrayList<MemberInfo> infos = searchMember(target, (temp.equals("3")? true : false));
 							
 							for(int i = 0 ; i < infos.size(); i++)
 								infos.get(i).showInfo();
@@ -189,7 +197,7 @@ public class MemberManager
 		String target = null;
 		while(true)
 		{
-			System.out.print("회원 정보를 수정합니다. 수정하고자하는 회원의 \n1. 이름으로 찾기ㅣ\n2. ID로 찾기\n3. 이전 메뉴로");
+			System.out.print("회원 정보를 수정합니다. 수정하고자하는 회원의 \n1. 이름으로 찾기\n2. ID로 찾기\n3. 이전 메뉴로");
 			temp = ScannerInstance.getInstance().nextLine();
 			
 			switch(temp)
@@ -199,7 +207,7 @@ public class MemberManager
 					
 					System.out.print(String.format("검색할 사람의 %s를 입력하세요 : ", (temp.equals("1")? "이름" : "ID") ));
 					target =  ScannerInstance.getInstance().nextLine();
-					ArrayList<MemberInfo> tempList = searchMember(target, false);
+					ArrayList<MemberInfo> tempList = searchMember(target, (temp.equals("1")? true : false));
 					
 					if(tempList.size() == 0)
 					{
@@ -300,6 +308,7 @@ public class MemberManager
 						else
 						{
 							m_memberList.remove(tempList.get(0));
+							LibraryManager.getInstance().saveMemberData(m_memberList);
 							System.out.println("선택한 회원의 탈퇴를 완료했습니다.");
 						}
 					}
@@ -446,6 +455,38 @@ public class MemberManager
 			}
 			
 			break;
+		}
+	}
+	
+	public MemberInfo getMemberInfo(String id)
+	{
+		for(int i = 0 ; i < m_memberList.size(); i++)
+		{
+			if(m_memberList.get(i).getID().equals(id))
+			{
+				return m_memberList.get(i);
+			}
+		}
+		
+		return null;
+	}
+	
+	public void returnBook(String memberID, String bookID)
+	{
+		for(int i = 0 ; i < m_memberList.size(); i++)
+		{
+			if(m_memberList.get(i).getID().equals(memberID))
+			{
+				for(int k = 0 ; k < m_memberList.get(i).getRentalList().size(); k++)
+				{
+					if(m_memberList.get(i).getRentalList().get(k).getID().equals(bookID))
+					{
+						m_memberList.get(i).getRentalList().remove(m_memberList.get(i).getRentalList().get(k));
+						LibraryManager.getInstance().saveMemberData(m_memberList);
+						return;
+					}
+				}
+			}
 		}
 	}
 }

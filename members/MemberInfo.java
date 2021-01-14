@@ -72,12 +72,14 @@ public class MemberInfo extends Info
 	@Override
 	public void showInfo()
 	{
-		System.out.print(String.format("ID : %s, 이름 : %s, 전화번호 : %s, 나이 : %d\n대여 목록 : ", m_ID, m_name, m_phoneNumber, m_age));
+		System.out.print(String.format("ID : %-6s \t 이름 : %-30s \t 전화번호 : %-15s \t 나이 : %-3d\n대여 목록 : ", m_ID, m_name, m_phoneNumber, m_age));
 		
 		for(int i = 0 ; i < m_rentalList.size(); i++)
 		{
-			System.out.print(m_rentalList.get(i).getTitle() + " ");
+			System.out.print(m_rentalList.get(i).getTitle() + " | ");
 		}
+		
+		System.out.println();
 	}
 	
 	// id 매칭해야하는지 확인 필요.

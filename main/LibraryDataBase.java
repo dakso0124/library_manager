@@ -19,11 +19,11 @@ public class LibraryDataBase
 {
 	public final static String bookSeparator = "|";
 	public final static String memberSeparator = ";";
-	public final static String rentalSeparator = "`";
 	
-	private String 	m_bookPath	= null;
-	private String 	m_memberPath	= null;
-	private File 	m_file 		= null;
+	private File 	m_file 		 = null;
+
+	private String 	m_bookPath	 = null;
+	private String 	m_memberPath = null;
 	
 	public LibraryDataBase()
 	{
@@ -210,7 +210,7 @@ public class LibraryDataBase
 			{
 				while ((line = br.readLine()) != null)
 				{
-					StringTokenizer st = new StringTokenizer(line, bookSeparator);
+					StringTokenizer st = new StringTokenizer(line, memberSeparator);
 
 					String id = st.nextToken();
 					String name = st.nextToken();

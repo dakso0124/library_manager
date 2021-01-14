@@ -51,6 +51,7 @@ public class Book extends Info
 	
 	public void setRentalMemberID(String rentalMemberID)
 	{
+		m_rental = true;
 		m_rentalMemberID = rentalMemberID;
 	}
 	
@@ -62,7 +63,7 @@ public class Book extends Info
 	@Override
 	public void showInfo()
 	{
-		System.out.println(String.format("ID : %s, 力格 : %s, 历磊 : %s", m_ID, m_title, m_author));
+		System.out.println(String.format("ID : %-6s 力格 : %-50s \t 历磊 : %-50s", m_ID, m_title, m_author));
 	}
 	
 	@Override

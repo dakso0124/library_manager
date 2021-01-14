@@ -9,6 +9,7 @@ import java.util.Scanner;
 import books.Book;
 import main.LibraryDataBase;
 import main.ScannerInstance;
+import members.MemberInfo;
 
 public class BookManager
 {
@@ -41,6 +42,9 @@ public class BookManager
 	public void setBookList(ArrayList<Book> bookList)
 	{
 		m_bookList = bookList;
+		
+		m_lastID = bookList.size();
+		m_lastBookID = String.format("%05d", m_lastID);
 	}
 	
 	public ArrayList<Book> getRentalBookList()
@@ -126,11 +130,12 @@ public class BookManager
 					{
 						m_bookList.add(new Book(m_lastBookID,title, author));
 						
+						LibraryManager.getInstance().saveBookData(m_bookList);
+						System.out.println(String.format("제목 : %s, ID : %s 추가되었습니다.", title, m_lastBookID));
+						
 						m_lastID++;
 						m_lastBookID = String.format("%05d", m_lastID);
 						
-						LibraryManager.getInstance().saveBookData(m_bookList);
-						System.out.println(String.format("제목 : %s, ID : %s 추가되었습니다.", title, m_lastBookID));
 						return;
 					}
 					else if(temp.toUpperCase().equals("N"))
@@ -279,17 +284,39 @@ public class BookManager
 								bExist = true;
 								if(!m_bookList.get(i).getRental())
 								{
-									m_bookList.get(i).setRental(true);
-									System.out.println("대여 완료.");
+									System.out.print("대여하려는 회원의 ID를 입력해 주세요 : ");
+									temp = ScannerInstance.getInstance().nextLine();
+									
+									MemberInfo info = MemberManager.getInstance().getMemberInfo(temp);
+									
+									if(info == null)
+									{
+										System.out.println("입력한 회원의 ID가 없습니다.");
+									}
+									else
+									{
+										m_bookList.get(i).setRentalMemberID(info.getID());
+										info.rentalBook(m_bookList.get(i), true);
+										
+										LibraryManager.getInstance().saveBookData(m_bookList);
+										
+										System.out.println("대여 완료.");
+										return;
+									}
 									break;
 								}
+								else
+								{
+									
+								}
 							}
-							
-							if(bExist)
-								System.out.println("찾으시는 도서가 모두 대여중입니다.");
-							else
-								System.out.println("찾으시는 도서가 존재하지 않습니다.");
 						}
+						
+						if(bExist)
+							System.out.println("찾으시는 도서가 모두 대여중입니다.");
+						else
+							System.out.println("찾으시는 도서가 존재하지 않습니다.");
+						
 						break;
 						
 					case "2":
@@ -306,8 +333,24 @@ public class BookManager
 								}
 								else
 								{
-									m_bookList.get(i).setRental(true);
-									System.out.println("대여 완료.");
+									System.out.print("대여하려는 회원의 ID를 입력해 주세요 : ");
+									temp = ScannerInstance.getInstance().nextLine();
+									
+									MemberInfo info = MemberManager.getInstance().getMemberInfo(temp);
+									
+									if(info == null)
+									{
+										System.out.println("입력한 회원의 ID가 없습니다.");
+									}
+									else
+									{
+										m_bookList.get(i).setRentalMemberID(info.getID());
+										info.rentalBook(m_bookList.get(i), true);
+										
+										LibraryManager.getInstance().saveBookData(m_bookList);
+										
+										System.out.println("대여 완료.");
+									}
 								}
 								break;
 							}
@@ -348,7 +391,11 @@ public class BookManager
 			{
 				if(m_bookList.get(i).getRental())
 				{
+					MemberManager.getInstance().returnBook(m_bookList.get(i).getRentalMemberID(), m_bookList.get(i).getID());
+					
 					m_bookList.get(i).setRental(false);
+					
+					LibraryManager.getInstance().saveBookData(m_bookList);
 					System.out.println("도서 반납 완료되었습니다.");
 				}
 				else
@@ -369,6 +416,9 @@ public class BookManager
 			if(m_bookList.get(i).getID().equals(temp))
 			{
 				System.out.println(String.format("도서 '%s' 분실처리를 완료했습니다.",m_bookList.remove(i).getTitle()));
+				MemberManager.getInstance().returnBook(m_bookList.get(i).getRentalMemberID(), m_bookList.get(i).getID());
+				
+				LibraryManager.getInstance().saveBookData(m_bookList);
 				return;
 			}
 		}
