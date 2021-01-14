@@ -11,13 +11,28 @@ import members.MemberInfo;
 
 public class MemberManager
 {
+	private static MemberManager instance;
+	
+	public static MemberManager getInstance()
+    {
+    	if(instance == null)
+    		instance = new MemberManager();
+    	
+        return instance;
+    }
+	
 	private ArrayList<MemberInfo> m_memberList;
 	private String m_lastMemberID;
 	
 	public void init()
 	{
 		m_memberList = new ArrayList<MemberInfo>();
-		m_lastMemberID = null;
+		m_lastMemberID = String.format("%05d", m_lastMemberID);
+	}
+	
+	public void setMemberInfo(ArrayList<MemberInfo> memberList)
+	{
+		m_memberList = memberList;
 	}
 	
 	public void showMenu()

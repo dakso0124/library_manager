@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class ScannerInstance
 {
-	private static Scanner sc; 
+	private static Scanner sc = null; 
 
 	private ScannerInstance()
 	{

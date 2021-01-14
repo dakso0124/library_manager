@@ -23,7 +23,7 @@ public class Book extends Info
 		m_title  = title;
 		m_author = author;
 		
-		m_rentalMemberID = null;
+		m_rentalMemberID = "none";
 	}
 	
 	public String getTitle()
@@ -39,7 +39,7 @@ public class Book extends Info
 	public void setRental(boolean bRental)
 	{
 		if(!bRental)
-			m_rentalMemberID = null;
+			m_rentalMemberID = "none";
 		
 		m_rental = bRental;
 	}
@@ -58,13 +58,6 @@ public class Book extends Info
 	{
 		return m_rentalMemberID;
 	}
-
-	public void setInformation(String bookID, String title, String author)
-	{
-		m_ID = bookID;
-		m_title = title;
-		m_author = author;
-	}
 	
 	@Override
 	public void showInfo()
@@ -76,6 +69,6 @@ public class Book extends Info
 	public String toString()
 	{			
 		return this.m_ID + LibraryDataBase.bookSeparator + this.m_title + LibraryDataBase.bookSeparator
-				+ this.m_author + LibraryDataBase.bookSeparator + (m_rentalMemberID == null? "null":this.m_rentalMemberID) ;
+				+ this.m_author + LibraryDataBase.bookSeparator + m_rentalMemberID;
 	}
 }

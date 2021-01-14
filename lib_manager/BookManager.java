@@ -4,23 +4,53 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 import books.Book;
+import main.LibraryDataBase;
 import main.ScannerInstance;
 
 public class BookManager
 {
-	private ArrayList<Book> bookList;
+	private static BookManager instance;
+	
+	public static BookManager getInstance()
+    {
+    	if(instance == null)
+    		instance = new BookManager();
+    	
+        return instance;
+    }
+	
+	private ArrayList<Book> m_bookList;
 	private String m_lastBookID;
 	private int m_lastID;
 	
 	public void init()
 	{
 		m_lastID 	 = 0;
-		
-		bookList 	 = new ArrayList<Book>();
-		
+		m_bookList = new ArrayList<Book>();
 		m_lastBookID = String.format("%05d", m_lastID);
+	}
+	
+	public void setBookList(ArrayList<Book> bookList)
+	{
+		m_bookList = bookList;
+	}
+	
+	public ArrayList<Book> getRentalBookList()
+	{
+		ArrayList<Book> rentalList = new ArrayList<Book>();
+		
+		for(int i = 0 ; i < m_bookList.size(); i++)
+		{
+			if(m_bookList.get(i).getRental())
+			{
+				rentalList.add(m_bookList.get(i));
+			}
+		}
+		
+		return rentalList;
 	}
 	
 	public void showMenu()
@@ -89,7 +119,7 @@ public class BookManager
 					
 					if(temp.toUpperCase().equals("Y"))
 					{
-						bookList.add(new Book(m_lastBookID,title, author));
+						m_bookList.add(new Book(m_lastBookID,title, author));
 						System.out.println(String.format("제목 : %s, ID : %s 추가되었습니다.", title, m_lastBookID));
 						m_lastID++;
 						m_lastBookID = String.format("%05d", m_lastID);
@@ -189,7 +219,7 @@ public class BookManager
 	// 전체 검색  title, 회원번호
 	private void searchAll(boolean bTitle)
 	{
-		ArrayList<Book> tempList = bookList;
+		ArrayList<Book> tempList = m_bookList;
 		
 		// 제목 정렬
 		if(bTitle)
@@ -234,14 +264,14 @@ public class BookManager
 						
 						boolean bExist = false;
 
-						for(int i = 0; i < bookList.size(); i++)
+						for(int i = 0; i < m_bookList.size(); i++)
 						{
-							if(bookList.get(i).getTitle().equals(temp))
+							if(m_bookList.get(i).getTitle().equals(temp))
 							{
 								bExist = true;
-								if(!bookList.get(i).getRental())
+								if(!m_bookList.get(i).getRental())
 								{
-									bookList.get(i).setRental(true);
+									m_bookList.get(i).setRental(true);
 									System.out.println("대여 완료.");
 									break;
 								}
@@ -258,17 +288,17 @@ public class BookManager
 						System.out.print("대여할 도서의 ID를 입력해 주세요 : ");
 						temp = ScannerInstance.getInstance().nextLine();
 
-						for(int i = 0; i < bookList.size(); i++)
+						for(int i = 0; i < m_bookList.size(); i++)
 						{
-							if(bookList.get(i).getID().equals(temp))
+							if(m_bookList.get(i).getID().equals(temp))
 							{
-								if(bookList.get(i).getRental())
+								if(m_bookList.get(i).getRental())
 								{
 									System.out.println("해당 도서는 이미 대여중입니다.");
 								}
 								else
 								{
-									bookList.get(i).setRental(true);
+									m_bookList.get(i).setRental(true);
 									System.out.println("대여 완료.");
 								}
 								break;
@@ -304,13 +334,13 @@ public class BookManager
 		System.out.print("도서를 반납합니다.\n반납한 도서의 ID를 입력해 주세요 : ");
 		String temp = ScannerInstance.getInstance().nextLine();
 		
-		for(int i = 0; i < bookList.size(); i++)
+		for(int i = 0; i < m_bookList.size(); i++)
 		{
-			if(bookList.get(i).getID().equals(temp))
+			if(m_bookList.get(i).getID().equals(temp))
 			{
-				if(bookList.get(i).getRental())
+				if(m_bookList.get(i).getRental())
 				{
-					bookList.get(i).setRental(false);
+					m_bookList.get(i).setRental(false);
 					System.out.println("도서 반납 완료되었습니다.");
 				}
 				else
@@ -326,11 +356,11 @@ public class BookManager
 		System.out.print("도서 분실 등록 합니다.\n분실된 도서의 ID를 입력해 주세요 : ");
 		String temp = ScannerInstance.getInstance().nextLine();
 		
-		for(int i = 0; i < bookList.size(); i++)
+		for(int i = 0; i < m_bookList.size(); i++)
 		{
-			if(bookList.get(i).getID().equals(temp))
+			if(m_bookList.get(i).getID().equals(temp))
 			{
-				System.out.println(String.format("도서 '%s' 분실처리를 완료했습니다.",bookList.remove(i).getTitle()));
+				System.out.println(String.format("도서 '%s' 분실처리를 완료했습니다.",m_bookList.remove(i).getTitle()));
 				return;
 			}
 		}
@@ -340,20 +370,20 @@ public class BookManager
 	{
 		ArrayList<Book> result = new ArrayList<Book>();
 		
-		for(int i = 0 ; i < bookList.size(); i++)
+		for(int i = 0 ; i < m_bookList.size(); i++)
 		{
 			if(bAuthor)
 			{
-				if(bookList.get(i).getAuthor().equals(target))
+				if(m_bookList.get(i).getAuthor().equals(target))
 				{
-					result.add(bookList.get(i));
+					result.add(m_bookList.get(i));
 				}
 			}
 			else
 			{
-				if(bookList.get(i).getTitle().contains(target))
+				if(m_bookList.get(i).getTitle().contains(target))
 				{
-					result.add(bookList.get(i));
+					result.add(m_bookList.get(i));
 				}
 			}
 		}

@@ -2,20 +2,25 @@ package lib_manager;
 
 import java.util.NoSuchElementException;
 
+import main.LibraryDataBase;
 import main.ScannerInstance;
 
 public class LibraryManager
 {
 	private BookManager bookManager;
 	private MemberManager memberManager;
+	private LibraryDataBase dataManager;
 	
 	public void init()
 	{		
 		bookManager = new BookManager();
 		memberManager = new MemberManager();
+		dataManager = new LibraryDataBase();
 		
 		bookManager.init();
 		memberManager.init();
+		
+		dataManager.loadLibraryInfo();
 	}
 	
 	public void startManager()
